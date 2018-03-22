@@ -20,8 +20,6 @@
  * @version    $Id$
  */
 
-require_once 'Zend/Crypt/Rsa.php';
-
 
 /**
  * @category   Zend
@@ -43,7 +41,7 @@ class Zend_Crypt_RsaTest extends PHPUnit\Framework\TestCase
         if (!extension_loaded('openssl')) {
             $this->markTestSkipped('Zend_Crypt_Rsa requires openssl extension to be loaded.');
         }
-        
+
         $this->_testPemString = <<<RSAKEY
 -----BEGIN RSA PRIVATE KEY-----
 MIIBOgIBAAJBANDiE2+Xi/WnO+s120NiiJhNyIButVu6zxqlVzz0wy2j4kQVUC4Z
@@ -86,9 +84,9 @@ l9Nwj3KnPKFdqzJchujP2TLNwSYoQnxgyoMxdho=
 
 CERT;
 
-        $this->_testPemPath = dirname(__FILE__) . '/_files/test.pem';
+        $this->_testPemPath = dirname(__FILE__) . '/Rsa/_files/test.pem';
 
-        $this->_testCertificatePath = dirname(__FILE__) . '/_files/test.cert';
+        $this->_testCertificatePath = dirname(__FILE__) . '/Rsa/_files/test.cert';
     }
 
     public function testConstructorSetsPemString()
@@ -317,14 +315,14 @@ CERT;
             'passPhrase' => '0987654321'
         );
         $keys = $rsa->generateKeys($config);
-        try {
-            $rsa = new Zend_Crypt_Rsa(array(
-                'passPhrase'=>'1234567890',
-                'pemString'=>$keys->privateKey->toString()
-            ));
-            $this->fail('Expected exception not thrown');
-        } catch (Zend_Crypt_Exception $e) {
-        }
+
+        $this->expectException(\Zend_Crypt_Exception::class);
+        $this->expectExceptionMessage('Unable to load public key');
+
+        $rsa = new Zend_Crypt_Rsa(array(
+            'passPhrase'=>'1234567890',
+            'pemString'=>$keys->privateKey->toString()
+        ));
     }
 
     public function testConstructorLoadsPassphrasedKeys()
@@ -335,7 +333,7 @@ CERT;
         if (!$test) {
             $this->markTestSkipped('Cannot generate a private key with openssl_pkey_new()');
         }
-        
+
         $config = array(
             'privateKeyBits' => 512,
             'passPhrase' => '0987654321'
@@ -346,6 +344,8 @@ CERT;
                 'passPhrase'=>'0987654321',
                 'pemString'=>$keys->privateKey->toString()
             ));
+            // Confirming that an exception isn't thrown
+            $this->assertTrue(true);
         } catch (Zend_Crypt_Exception $e) {
             $this->fail('Passphrase loading failed of a private key');
         }
@@ -358,6 +358,9 @@ CERT;
     {
         $rsa = new Zend_Crypt_Rsa;
         $rsa->setPemString($this->_testPemStringPublic);
+
+        // Confirming that an exception isn't thrown
+        $this->assertTrue(true);
     }
 
 }

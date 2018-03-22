@@ -40,6 +40,21 @@
  * @package    Zend_Crypt
  * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ *
+ * From Zend_Crypt_Math_BigInteger_Interface
+ * @method mixed init($operand, $base = 10)
+ * @method mixed add($left_operand, $right_operand)
+ * @method mixed subtract($left_operand, $right_operand)
+ * @method mixed compare($left_operand, $right_operand)
+ * @method mixed divide($left_operand, $right_operand)
+ * @method mixed modulus($left_operand, $modulus)
+ * @method mixed multiply($left_operand, $right_operand)
+ * @method mixed pow($left_operand, $right_operand)
+ * @method mixed powmod($left_operand, $right_operand, $modulus)
+ * @method mixed sqrt($operand)
+ * @method mixed binaryToInteger($operand)
+ * @method mixed integerToBinary($operand)
+ * @method mixed hexToDecimal($operand)
  */
 class Zend_Crypt_Math_BigInteger
 {
